@@ -86,6 +86,7 @@ public class SeatingChart {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				DataParse parser = new DataParse(selected);
+				parser.setParent(pan2);
 				//pan2.setVisible(false);
 			}
 		});
