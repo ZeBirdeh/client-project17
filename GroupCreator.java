@@ -3,17 +3,17 @@ public class GroupCreator {
 
 	public static void main(String[] args){
 		GroupCreator grouper = new GroupCreator();
-		grouper.groupify(new String[]{"1CMS","2CFS","3CFS","4CFS","5CMS","6CMS","7CFS","8CFG","9CMS","ACMS","BCMS","CCMS","DCMS","ECMS","FCMS","GCFS",
+		/*grouper.groupify(new String[]{"1CMS","2CFS","3CFS","4CFS","5CMS","6CMS","7CFS","8CFG","9CMS","ACMS","BCMS","CCMS","DCMS","ECMS","FCMS","GCFS",
 				"1BMS","2BFS","3BFS","5BMS","6BMS","7BMS","8BMS","1DMS","2DFH","3DMG","4DMG","5DMG","6DMH","7DMH","8DMH","9DMS","ADMS"}
-				,1);
+				,1);*/
 	}
 	
-	public void groupify(String[] test2, int PRIORITIZE) {
+	public ArrayList<String> groupify(ArrayList<String> test, int PRIORITIZE) {
 		//final int PRIORITIZE = 1;
-		System.out.println(test2.length);
+		//System.out.println(test2.length);
 		final int ATTEMPTS = 12000;
-		int extras = test2.length % 4;
-		int numGroups = test2.length / 4;
+		int extras = test.size() % 4;
+		int numGroups = test.size() / 4;
 		if (extras == 3){
 			numGroups++;
 		}
@@ -22,14 +22,14 @@ public class GroupCreator {
 		//		{"1CM","2CM","3CM","4CM","5CM","6CM","7CM","8CF"},{"1DF","2DF","3DM","4DM","5DM","6DM","7DM","8DM"}}; //if person doesn't exist use ""
 		int numTotalGirls = 0;
 		boolean alreadyResetF = false;
-		for (String x: test2){
+		for (String x: test){
 			if (x.charAt(2) == 'F') numTotalGirls++;
 		}
 		boolean oddGirls = (numTotalGirls % 2 == 1);
 		
 		int numTotalNotSMCS = 0;
 		//boolean alreadyResetS = false;
-		for (String x: test2){
+		for (String x: test){
 			if (x.charAt(3) != 'S') numTotalNotSMCS++;
 		}
 		boolean oddNotSMCS = (numTotalNotSMCS % 2 == 1);
@@ -39,14 +39,11 @@ public class GroupCreator {
 		ArrayList<String[]> stuPairs = new ArrayList<String[]>();
 		ArrayList<String[]> stuFPairs = new ArrayList<String[]>();
 		//ArrayList<String[]> stuSPairs = new ArrayList<String[]>();
-		
-		ArrayList<String> test = new ArrayList<String>();
-		for (String a: test2){
-			test.add(a);
-		}
+
 		ArrayList<String> test3 = new ArrayList<String>(test);
 		
 		int c=0;
+		ArrayList<String> results = new ArrayList<String>();
 		for (int n=0; n<5; n++){
 			ArrayList<String> test4 = new ArrayList<String>(test);
 			if (numTotalGirls % 2 == 1) oddGirls = true; //The boolean variable to set to true if we need to make one group with one girl only
@@ -54,7 +51,6 @@ public class GroupCreator {
 			ArrayList<String[]> tempFPairs = new ArrayList<String[]>(stuFPairs);
 			//ArrayList<String[]> tempSPairs = new ArrayList<String[]>(stuSPairs);
 			//ArrayList<String> stuUsed = new ArrayList<String>();
-			ArrayList<String> results = new ArrayList<String>();
 			int count = 0;
 			String a = "";
 			String[] group = new String[4];
@@ -166,13 +162,14 @@ public class GroupCreator {
 				if (count >= ATTEMPTS) break;
 				for (int i=0; i<group.length-1; i++){
 					for (int j=i+1; j<group.length; j++){		
-						if (group[i].charAt(2) == 'F' || group[j].charAt(2) == 'F') //Considering letting girls repeat partners, since there are probably less girls
+						if (group[i].charAt(2) == 'F' || group[j].charAt(2) == 'F') 
 							tempFPairs.add(new String[]{group[i],group[j]});
 						else {tempPairs.add(new String[]{group[i],group[j]});}
 					}
 				}
 				
-				a += (n+1)+": ";
+				//a += (n+1)+": ";
+				a += ", ";
 				for (int x=0; x<group.length; x++){
 					a += group[x]+" ";
 				}
@@ -183,26 +180,27 @@ public class GroupCreator {
 			}
 			if (count < ATTEMPTS){
 				results.add(a);
+				//System.out.println(results);
 				System.out.println(a+"\t"+c);
 				stuPairs = new ArrayList<String[]>(tempPairs);
 				stuFPairs = new ArrayList<String[]>(tempFPairs);
 				//stuSPairs = new ArrayList<String[]>(tempSPairs);
 			} else {
-				if (c > ((PRIORITIZE == 1) ? 200000*test2.length : 150000*test2.length) && !alreadyResetF){
+				if (c > ((PRIORITIZE == 1) ? 200000*test.size() : 150000*test.size()) && !alreadyResetF){
 					alreadyResetF = true;
 					//stuFPairs = new ArrayList<String[]>();
 					restrictG = false;
 					System.out.println("RESET girl pairs");
 				}
 				
-				if (c > ((PRIORITIZE == 0) ? 200000*test2.length : 150000*test2.length) && restrictHouses){
+				if (c > ((PRIORITIZE == 0) ? 200000*test.size() : 150000*test.size()) && restrictHouses){
 					restrictHouses = false;
 				//	alreadyResetS = true;
 				//	stuSPairs = new ArrayList<String[]>();
 					System.out.println("REMOVED house restrictions");
 				}
 
-				if (c > 300000*test2.length){
+				if (c > 300000*test.size()){
 					c = 0;
 					stuPairs = new ArrayList<String[]>();
 					stuFPairs = new ArrayList<String[]>();
@@ -213,6 +211,7 @@ public class GroupCreator {
 				}
 				n--;
 			}
+
 		}
 		System.out.println(stuPairs.size());
 		for (int i=0; i<stuPairs.size()-1; i++){
@@ -220,6 +219,7 @@ public class GroupCreator {
 				if ((stuPairs.get(i)[0].equals(stuPairs.get(j)[0]) && stuPairs.get(i)[1].equals(stuPairs.get(j)[1])) || (stuPairs.get(i)[1].equals(stuPairs.get(j)[0]) && stuPairs.get(i)[0].equals(stuPairs.get(j)[1]))) System.out.println(i+""+j+"Duplicates!!!!");
 			}
 		}
+		return results;
 	}
 
 }

@@ -43,9 +43,7 @@ class DataFilter extends FileFilter{
 	    if (extension != null) {
 	    	if (extension.equals("xlsx")) {
                 return true;
-	    	} else if (extension.equals("xml")) {
-	    		return true;
-        	} else {
+	    	} else {
 	            return false;
 	        }
 	    }
@@ -54,7 +52,7 @@ class DataFilter extends FileFilter{
 	}
 
 	public String getDescription() {
-		return "Compatible Data Files (.xlsx, .xml)";
+		return "Compatible Data Files (.xlsx)";
 	}
 	
 }
@@ -76,7 +74,11 @@ public class SeatingChart {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				selected = showChooser();
+				if (selected == null){
+					return;
+				}
 				address.setText(selected.getPath());
+				but2.setEnabled(true);
 			}
 		});
 		
@@ -90,6 +92,7 @@ public class SeatingChart {
 				//pan2.setVisible(false);
 			}
 		});
+		but2.setEnabled(false);
 
 		address = new JTextField();
 		address.setEditable(false);
@@ -110,6 +113,7 @@ public class SeatingChart {
 		            	address.setText(file.getPath());
 		            	selected = file;
 		            }
+		            but2.setEnabled(true);
 		            //    // process files
 		            //}
 		        } catch (Exception ex) {
@@ -146,6 +150,9 @@ public class SeatingChart {
 		//fc.setAcceptAllFileFilterUsed(false);
 		//pan.setTransferHandler();
 		int returnVal = fc.showDialog(pan, "Attach");
+		if (returnVal == 1){
+			return null;
+		}
 		return fc.getSelectedFile();
 	}
 	
