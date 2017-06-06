@@ -60,13 +60,15 @@ class ExcelFilter extends FileFilter{
 public class ExcelFileSelector {
 	private JPanel pan;
 	private JFrame pan2;
+	private SeatingChart sc;
 	private JButton but;
 	private JButton but2;
 	private JTextField address;
 	private JFileChooser fc;
 	private File selected;
 	
-	public ExcelFileSelector(){
+	public ExcelFileSelector(SeatingChart par){
+		sc = par;
 		pan2 = new JFrame("Choose File");
 		but = new JButton("Browse");
 		but.addActionListener(new ActionListener()
@@ -88,11 +90,11 @@ public class ExcelFileSelector {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//DataParse parser = new DataParse(selected.getPath());
-				Thread t = new Thread(new DataParse(selected.getPath()));
-				t.start();
+				//Thread t = new Thread(new DataParse(selected.getPath()));
+				//t.start();
 				//parser.setParent(pan2);
 				//double time = System.currentTimeMillis();
-				pan2.setVisible(false);
+				//pan2.setVisible(false);
 				
 			}
 		});
@@ -161,6 +163,6 @@ public class ExcelFileSelector {
 	}
 	
 	public static void main(String[] args){
-		ExcelFileSelector sc = new ExcelFileSelector();
+		//ExcelFileSelector sc = new ExcelFileSelector();
 	}
 }
