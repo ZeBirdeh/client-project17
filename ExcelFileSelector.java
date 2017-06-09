@@ -66,6 +66,7 @@ public class ExcelFileSelector {
 	private JTextField address;
 	private JFileChooser fc;
 	private File selected;
+	public SeatingChart parent;
 	
 	public ExcelFileSelector(SeatingChart par){
 		sc = par;
@@ -90,11 +91,14 @@ public class ExcelFileSelector {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//DataParse parser = new DataParse(selected.getPath());
-				//Thread t = new Thread(new DataParse(selected.getPath()));
+				parent.setPath(selected.getPath());
+				//DataParse dp = new DataParse(selected.getPath(), parent);
+				//Thread t = new Thread(dp);
 				//t.start();
 				//parser.setParent(pan2);
 				//double time = System.currentTimeMillis();
-				//pan2.setVisible(false);
+				pan2.setVisible(false);
+				pan2.dispose();
 				
 			}
 		});
