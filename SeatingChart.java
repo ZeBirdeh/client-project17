@@ -1,10 +1,7 @@
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,7 +10,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,8 +29,6 @@ public class SeatingChart {
 	private String filePath;
 	private JMenuBar menuBar;
 	private JPanel menuBar2;
-	private JMenu menu;
-	private JMenuItem menuItem;
 	private MenuItemListener menuItemListener;
 	
 	public SeatingChart(){
@@ -77,22 +71,6 @@ public class SeatingChart {
 		
 		menuBar2.add(importbut);
 		menuBar2.add(runbut);
-		
-	    //pan.setSize(pan2.getWidth(), pan2.getHeight()-50);
-		
-		/*fcBut = new JButton("Choose File");
-		fcBut.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				showChooser();
-			}
-		});
-		
-		sortBut = new JButton("Sort List");
-		sortBut.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0){
-				
-			}
-		});*/	
 
 		//Create the menu bar.
 		menuBar = new JMenuBar();
@@ -199,8 +177,7 @@ public class SeatingChart {
 			this.setEditable(false);
 		}
 		
-	    public void actionPerformed(ActionEvent e) {            
-	    	//this.setText(e.getActionCommand() + " JMenuItem clicked.");
+	    public void actionPerformed(ActionEvent e) {
 	    	switch (e.getActionCommand()){
 	    	case "Import":
 	    		showChooser();
@@ -218,7 +195,6 @@ public class SeatingChart {
 					URL url = new URL("https://docs.google.com/document/d/1XMkBt5jVRSBPxYx3LvOCK-zANIWJCSob3yJgFGD1kCA/edit?usp=sharing");
 					openWebpage(url);
 				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 	    		break;

@@ -129,6 +129,7 @@ public class DataParse implements Runnable{
 		//mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void readExcelData(String excelFilePath) throws IOException{
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
          
@@ -136,7 +137,6 @@ public class DataParse implements Runnable{
         XSSFSheet firstSheet = workbook.getSheetAt(0);
         Iterator<Row> iterator = firstSheet.rowIterator();
         iterator.next();
-        
         while (iterator.hasNext()) {
         	XSSFRow nextRow = (XSSFRow) iterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -156,9 +156,11 @@ public class DataParse implements Runnable{
             }
            
         }
-         
         workbook.close();
         inputStream.close();
+        if (studentNum < 20){
+        	throw new IOException();
+        }
 	}
 	
 	public void formatName(String name, String house, boolean gender, boolean clemente){
