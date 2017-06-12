@@ -1,15 +1,25 @@
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Date;
 
+import org.apache.poi.xwpf.usermodel.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,7 +39,10 @@ public class SeatingChart {
 	private String filePath;
 	private JMenuBar menuBar;
 	private JPanel menuBar2;
+	private JMenu menu;
+	private JMenuItem menuItem;
 	private MenuItemListener menuItemListener;
+	public String wordExport;
 	
 	public SeatingChart(){
 		pan2 = new JFrame("Seating Chart Creator");
@@ -71,6 +84,22 @@ public class SeatingChart {
 		
 		menuBar2.add(importbut);
 		menuBar2.add(runbut);
+		
+	    //pan.setSize(pan2.getWidth(), pan2.getHeight()-50);
+		
+		/*fcBut = new JButton("Choose File");
+		fcBut.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				showChooser();
+			}
+		});
+		
+		sortBut = new JButton("Sort List");
+		sortBut.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				
+			}
+		});*/	
 
 		//Create the menu bar.
 		menuBar = new JMenuBar();
@@ -177,7 +206,8 @@ public class SeatingChart {
 			this.setEditable(false);
 		}
 		
-	    public void actionPerformed(ActionEvent e) {
+	    public void actionPerformed(ActionEvent e) {            
+	    	//this.setText(e.getActionCommand() + " JMenuItem clicked.");
 	    	switch (e.getActionCommand()){
 	    	case "Import":
 	    		showChooser();
@@ -195,15 +225,53 @@ public class SeatingChart {
 					URL url = new URL("https://docs.google.com/document/d/1XMkBt5jVRSBPxYx3LvOCK-zANIWJCSob3yJgFGD1kCA/edit?usp=sharing");
 					openWebpage(url);
 				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 	    		break;
 	    	case "Export":
+	    		createWordDoc();
+	    		break;
 	    	case "Exit":
 	    		System.exit(0);
 	    		break;
 	    	case "New":
 	    	}
+	    }
+	    
+	    private void createWordDoc(){
+	    	XWPFDocument doc = new XWPFDocument();
+
+	        XWPFParagraph p1 = doc.createParagraph();
+	        String[] wordRuns = wordExport.split("NEWRUN");
+	        
+	        for (String paragraphs: wordRuns){
+	        	XWPFRun run = p1.createRun();
+	        	run.setFontFamily("Times New Roman");
+	        	run.setFontSize(14);
+	        	String[] lines = paragraphs.split("LINEBREAK");
+	        	for (String line: lines){
+	        		if (line.startsWith("Day")) {run.addBreak(BreakType.PAGE); run.setFontSize(16); run.setBold(true);} else {run.setFontSize(14); run.setBold(false);}
+	        		String[] tabbo = line.split("\t");
+	        		for (String tabb: tabbo){
+		        		run.setText(tabb);
+		        		run.addTab();
+	        		}
+	        		run.addCarriageReturn();
+	        	}
+	        }
+	        
+	        FileOutputStream out = null;
+	        try {
+				out = new FileOutputStream("Seating-Chart-" + (new Date().getMonth()) + "" + (new Date().getDate()) + ".docx");
+				doc.write(out);
+		        out.close();
+		        doc.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e){
+				e.printStackTrace();
+			}
 	    }
 	    
 	    private void openWebpage(URI uri) {

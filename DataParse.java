@@ -129,7 +129,6 @@ public class DataParse implements Runnable{
 		//mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void readExcelData(String excelFilePath) throws IOException{
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
          
@@ -137,6 +136,7 @@ public class DataParse implements Runnable{
         XSSFSheet firstSheet = workbook.getSheetAt(0);
         Iterator<Row> iterator = firstSheet.rowIterator();
         iterator.next();
+        
         while (iterator.hasNext()) {
         	XSSFRow nextRow = (XSSFRow) iterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -156,11 +156,9 @@ public class DataParse implements Runnable{
             }
            
         }
+         
         workbook.close();
         inputStream.close();
-        if (studentNum < 20){
-        	throw new IOException();
-        }
 	}
 	
 	public void formatName(String name, String house, boolean gender, boolean clemente){
@@ -180,11 +178,12 @@ public class DataParse implements Runnable{
 	public void doThingy(){
 		GroupCreator grouper = new GroupCreator(this);
 		ArrayList<String> results = grouper.groupify(students, 1);
-		result = parseDataList(results).split("\n\n");
+		result = parseDataList(results).split("\n\n\n");
 		displayArea.setText(result[0]);
 		left.setEnabled(true);right.setEnabled(true);
 		studentNames.sort(new NameComparator());
 	    parent.getChart(mainFrame);
+	    setPrintText();
 	}
 	
 	public void incrementProgress(int p){
@@ -204,6 +203,21 @@ public class DataParse implements Runnable{
 		}
 	}
 	
+	public void setPrintText(){
+		String outstr = "";
+		for (int e=0; e<5; e++){
+			outstr += "Day "+(e+1)+"NEWRUN";
+			for (String str: studentNames){
+				outstr += str + "\t\t" + "Group " + studentResults.get(str)[position]+"LINEBREAK";
+			}
+		}
+		outstr += "NEWRUN";
+		for (int e=0; e<5; e++){
+			outstr += String.join("LINEBREAK", result[e].split("\n")) + "NEWRUN";
+		}
+		parent.wordExport = outstr;
+	}
+	
 	public String parseDataList(ArrayList<String> a){
 		String outstr = "";
 		int e=1;
@@ -221,7 +235,7 @@ public class DataParse implements Runnable{
 					thingy[e-2] = i;
 					studentResults.put(formatStudents.get(d), thingy);
 				}
-				outstr += "\n";
+				outstr += "\n\n";
 			}
 			outstr += "\n";
 		}

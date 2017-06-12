@@ -150,6 +150,7 @@ public class ExcelFileSelector {
 		
 		pan2.setVisible(true);
 		pan2.setBounds(50, 50, 520, 310);
+	    //pan2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	private File showChooser(){
@@ -157,10 +158,15 @@ public class ExcelFileSelector {
 		fc.addChoosableFileFilter(new ExcelFilter());
 		pan = new JPanel();
 		fc.setAcceptAllFileFilterUsed(false);
+		//pan.setTransferHandler();
 		int returnVal = fc.showDialog(pan, "Attach");
 		if (returnVal == 1){
 			return null;
 		}
 		return fc.getSelectedFile();
+	}
+	
+	public static void main(String[] args){
+		//ExcelFileSelector sc = new ExcelFileSelector();
 	}
 }

@@ -28,7 +28,6 @@ public class GroupCreator {
 			if (x.charAt(2) == 'F') numTotalGirls++;
 		}
 		boolean oddGirls = (numTotalGirls % 2 == 1);
-		boolean restrictG = true;
 		if (numTotalGirls < test.size() / 3){
 			
 		}
@@ -39,7 +38,6 @@ public class GroupCreator {
 			if (x.charAt(4) == 'C') numClemente++;
 		}
 		int maxclemente = numClemente / numGroups + 1;
-		boolean restrictC = true;
 		
 		int numTotalNotSMCS = 0;
 		//boolean alreadyResetS = false;
@@ -48,6 +46,8 @@ public class GroupCreator {
 		}
 		boolean oddNotSMCS = (numTotalNotSMCS % 2 == 1);
 		boolean restrictHouses = true;
+		boolean restrictG = true;
+		boolean restrictC = true;
 		
 		ArrayList<String[]> stuPairs = new ArrayList<String[]>();
 		ArrayList<String[]> stuFPairs = new ArrayList<String[]>();
@@ -81,13 +81,38 @@ public class GroupCreator {
 					count++;
 					c++;
 					flag = false;
+					//for (int i=0; i<test.length; i++){ //Choose the random people
+					//	int num = (int)(Math.random()*test[i].length);
+					//	group[i] = test[i][num];
+					//}
+					/*
+					for (int i=0; i<test2.length; i++){ //Choose the random people
+						int num = (int)(Math.random()*test2[i].length);
+						group[i] = test2[i][num];
+					}
+					group[3] = group[1];
+					group[2] = group[0];
+					while (group[3].equals(group[1])){
+						int num = (int)(Math.random()*test2[1].length);
+						group[3] = test2[1][num];
+					}
+					while (group[2].equals(group[0])){
+						int num = (int)(Math.random()*test2[0].length);
+						group[2] = test2[0][num];
+					}
+					*/
 					
 					int h = 0;
-					while (h<group.length){ //Generate the group
-						int num = (int)(Math.random()*test3.size());
+					while (h<group.length){
+						int num = (int)(Math.random()*test3.size());//(int)(Math.random()*test2.length);
+						//group[h] = test2[num];
 						group[h] = test3.get(num);
+						//for (int i=0; i<h; i++){
+						//	if (group[i].equals(group[h])) h--;
+						//}
 						test3.remove(num);
 						h++;
+						//System.out.println(test3);
 					}
 					
 					for (int i=0; i<tempPairs.size(); i++){	//Not very optimized way to check every single pair of people used so far
@@ -107,6 +132,10 @@ public class GroupCreator {
 						if (has1 && has2) flag = true;
 					}
 					
+					//for (int i=0; i<group.length; i++){ //Makes sure no people are reused (not efficient)
+					//	if (stuUsed.indexOf(group[i]) > -1) flag = true;
+					//}
+					
 					if (restrictG){
 						int numgirls = 0; //Requires 2 or 0 girls in each group
 						for (int i=0; i<group.length; i++){
@@ -116,7 +145,7 @@ public class GroupCreator {
 						else if (!(numgirls == 2 || numgirls == 0)) {flag = true;}
 					}
 					if (restrictC){
-						int numc = 0; //Requires 2 or 0 clemente kids in each group
+						int numc = 0; //Requires 2 or 0 girls in each group
 						for (int i=0; i<group.length; i++){
 							if (group[i].charAt(4) == 'C') numc++;
 						}
@@ -128,6 +157,7 @@ public class GroupCreator {
 						for (int i=0; i<group.length; i++){
 							if (group[i].charAt(3) != 'S') numnotsmcs++;
 						}
+						//if (!(numnotsmcs == 2 || numnotsmcs == 0)) flag = true;
 						if (numnotsmcs == 3 && oddNotSMCS) {oddNotSMCS = false;}
 						else if (!(numnotsmcs == 2 || numnotsmcs == 0)) {flag = true;}
 					}
