@@ -28,6 +28,9 @@ public class GroupCreator {
 			if (x.charAt(2) == 'F') numTotalGirls++;
 		}
 		boolean oddGirls = (numTotalGirls % 2 == 1);
+		if (numTotalGirls < test.size() / 3){
+			
+		}
 
 		int numClemente = 0;
 		boolean alreadyResetC = false;
@@ -159,27 +162,11 @@ public class GroupCreator {
 						else if (!(numnotsmcs == 2 || numnotsmcs == 0)) {flag = true;}
 					}
 					/////////////////End Section////////////
-					
-					/*//////////////These two count humanities and global separately
-					int numhum = 0;
-					int numglo = 0;
-					for (int i=0; i<group.length; i++){
-						if (group[i].charAt(3) == 'H') numhum++;
-						if (group[i].charAt(3) == 'G') numglo++;
-					}
-					if (!(numhum == 2 || numhum == 0)) flag = true;
-					if (!(numglo == 2 || numglo == 0)) flag = true;
-					///////////////End Section//////*/
-					
-					//for (int x=0; x<group.length; x++){
-					//	System.out.print(group[x]+" ");
-					//}
-					//System.out.println();
 				}
 				if (count >= ATTEMPTS) break;
 				for (int i=0; i<group.length-1; i++){
 					for (int j=i+1; j<group.length; j++){		
-						if (group[i].charAt(2) == 'F' || group[j].charAt(2) == 'F') 
+						if (group[i].charAt(2) == 'F' && group[j].charAt(2) == 'F') 
 							tempFPairs.add(new String[]{group[i],group[j]});
 						else {tempPairs.add(new String[]{group[i],group[j]});}
 					}
@@ -202,14 +189,14 @@ public class GroupCreator {
 				stuFPairs = new ArrayList<String[]>(tempFPairs);
 				//stuSPairs = new ArrayList<String[]>(tempSPairs);
 			} else {
-				if (c > ((PRIORITIZE == 1) ? 200000*test.size() : 150000*test.size()) && !alreadyResetF){
+				if (c > ((PRIORITIZE == 1) ? 400000*numTotalGirls : 300000*numTotalGirls) && !alreadyResetF){
 					alreadyResetF = true;
 					//stuFPairs = new ArrayList<String[]>();
 					restrictG = false;
 					System.out.println("RESET girl pairs");
 				}
 				
-				if (c > ((PRIORITIZE == 0) ? 200000*test.size() : 150000*test.size()) && restrictHouses){
+				if (c > ((PRIORITIZE == 0) ? 400000*numTotalNotSMCS : 30000*numTotalNotSMCS) && restrictHouses){
 					restrictHouses = false;
 				//	alreadyResetS = true;
 				//	stuSPairs = new ArrayList<String[]>();

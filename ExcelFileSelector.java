@@ -11,10 +11,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
@@ -60,13 +62,19 @@ class ExcelFilter extends FileFilter{
 public class ExcelFileSelector {
 	private JPanel pan;
 	private JFrame pan2;
+	private SeatingChart sc;
 	private JButton but;
 	private JButton but2;
 	private JTextField address;
+	private JRadioButton firstSesh;
+	private JRadioButton secSesh;
+	private ButtonGroup group1;
 	private JFileChooser fc;
 	private File selected;
+	public SeatingChart parent;
 	
-	public ExcelFileSelector(){
+	public ExcelFileSelector(SeatingChart par){
+		sc = par;
 		pan2 = new JFrame("Choose File");
 		but = new JButton("Browse");
 		but.addActionListener(new ActionListener()
@@ -87,17 +95,24 @@ public class ExcelFileSelector {
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//DataParse parser = new DataParse(selected.getPath());
-				Thread t = new Thread(new DataParse(selected.getPath()));
-				t.start();
-				//parser.setParent(pan2);
-				//double time = System.currentTimeMillis();
-				pan2.setVisible(false);
+				if (firstSesh.isSelected() || secSesh.isSelected()){
+					parent.setPath(selected.getPath());
+					parent.setSession(firstSesh.isSelected() ? 1 : 2);
+					pan2.setVisible(false);
+					System.out.println(parent.getSession());
+					pan2.dispose();
+				}
 				
 			}
 		});
 		but2.setEnabled(false);
 
+		firstSesh = new JRadioButton("First Session");
+		secSesh = new JRadioButton("Second Session");
+		group1 = new ButtonGroup();
+		group1.add(firstSesh);
+		group1.add(secSesh);
+		
 		address = new JTextField();
 		address.setEditable(false);
 		
@@ -139,7 +154,13 @@ public class ExcelFileSelector {
 	    c.gridwidth = 2;c.gridy = 1;c.gridx = 0;c.fill = GridBagConstraints.BOTH;c.weightx = 1;c.weighty = 1;
 	    pane.add(myPanel,c);
 	    
-	    c.gridwidth = 2;c.gridy = 2;c.gridx = 0;c.fill = GridBagConstraints.HORIZONTAL;c.weightx = 1;c.weighty = 0;
+	    c.gridwidth = 1;c.gridy = 2;c.gridx = 0;c.fill = GridBagConstraints.HORIZONTAL;c.weightx = 0.5;c.weighty = 0;
+	    pane.add(firstSesh,c);
+	    
+	    c.gridwidth = 1;c.gridy = 2;c.gridx = 1;c.fill = GridBagConstraints.HORIZONTAL;c.weightx = 0.5;c.weighty = 0;
+	    pane.add(secSesh,c);
+	    
+	    c.gridwidth = 2;c.gridy = 3;c.gridx = 0;c.fill = GridBagConstraints.HORIZONTAL;c.weightx = 1;c.weighty = 0;
 	    pane.add(but2,c);
 		
 		pan2.setVisible(true);
@@ -161,6 +182,6 @@ public class ExcelFileSelector {
 	}
 	
 	public static void main(String[] args){
-		ExcelFileSelector sc = new ExcelFileSelector();
+		ExcelFileSelector sc = new ExcelFileSelector(null);
 	}
 }
